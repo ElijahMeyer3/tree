@@ -1,134 +1,163 @@
 library(shiny)
 
 ui <- fluidPage(
-  tabsetPanel(id = "main_tabs",
-              
-              # --- Tree Girth Tab ---
-              tabPanel("Tree Girth Sampling",
-                       div(
-                         style = "
-          background-image: url('forest.png');
-          background-size: cover;
-          background-position: center;
-          min-height: 100vh;
-          padding: 20px;
-          font-weight: bold;
-          font-size: 18px;
-          color: black;",
-                         
-                         # Semi-transparent overlay for text readability
-                         div(style = "background-color: rgba(255,255,255,0.7); padding: 20px; border-radius: 10px;",
-                             
-                             h3("Assignment Instructions:"),
-                             p("Your goal is to estimate the population mean girth of ALL trees in the forest. However, there are 1000s of trees in the forest, and you don't have time to sample all of them."),
-                             p("You must submit the following as part of your homework-1. This is a hand-written assignment you will turn in on Gradescope. Label each question (forest vs skittles) and question part (1, 2, 3) appropriately on your assignment for full credit. I also want you to upload a screenshot of you collecting data from the app on Gradescope."),
-                             p("Note, if you refresh your current page, you will lose your sample!"),
-                             p("This homework assignment was prepared by Dr. Meyer."),
-                             p("For this assignment, you may estimate the value of σ = 7, but do not assume you know the distribution of your parent distribution X."),
-                             tags$ol(
-                               tags$li("Discuss how you could take a random sample of trees from the forest."),
-                               tags$li("Discuss what a convenience sample would look like, and how that could cause sampling bias in your results."),
-                               tags$li("Take your sample! Report your sample size in proper notation."),
-                               tags$li("Calculate your sample mean. Report this using proper notation."),
-                               tags$li("Are you justified to calculate a confidence interval with your data? Justify your answer."),
-                               tags$li("Regardless of your answer to the last question, report a 99% confidence interval."),
-                               tags$li("Interpret your confidence interval in the context of the problem.")
-                             ),
-                             br(),
-                             h3("Click a tree to generate a new girth observation"),
-                             fluidRow(
-                               column(4, actionButton("oak", label = tags$img(src = "oak.png", height = "150px"), style = "border:none; background:none;")),
-                               column(4, actionButton("pine", label = tags$img(src = "pine.png", height = "150px"), style = "border:none; background:none;")),
-                               column(4, actionButton("maple", label = tags$img(src = "maple.png", height = "150px"), style = "border:none; background:none;"))
-                             ),
-                             br(),
-                             h4("All Observed Girths:"),
-                             tableOutput("girth_table")
-                         )
-                       )
-              ),
-              
-              # --- Purple Skittles Tab ---
-              tabPanel("Purple Skittles Sampling",
-                       div(
-                         style = "
-          background-image: url('factory.png');
-          background-size: cover;
-          background-position: center;
-          min-height: 100vh;
-          padding: 20px;
-          font-weight: bold;
-          font-size: 18px;
-          color: black;",
-                         
-                         # Semi-transparent overlay for text readability
-                         div(style = "background-color: rgba(255,255,255,0.7); padding: 20px; border-radius: 10px;",
-                             
-                             h3("Assignment Instructions:"),
-                             p("Your goal is to estimate the population proportion of purple skittles in skittles bags. However, you can't realistically calculate this information, so you plan to take a sample!"),
-                             p("You must submit the following as part of your homework-1:"),
-                             tags$ol(
-                               tags$li("Discuss how you could take a random sample of skittles from a skittles factory. Hint: Think about the different designs we have discussed in class."),
-                               tags$li("Discuss what a convenience sample would look like, and how that could cause sampling bias in your results."),
-                               tags$li("Take your sample! Report your sample size in proper notation."),
-                               tags$li("Calculate your sample proportion. Report this using proper notation."),
-                               tags$li("Are you justified to calculate a confidence interval with your data? Justify your answer."),
-                               tags$li("Regardless of your answer to the last question, report a 90% confidence interval."),
-                               tags$li("Interpret your confidence interval in the context of the problem.")
-                             ),
-                             br(),
-                             h3("Click the Skittle to sample if the candy is purple (Yes/No)"),
-                             fluidRow(
-                               column(12, actionButton("sample_skittle", label = tags$img(src = "skittle.png", height = "150px"), style = "border:none; background:none;"))
-                             ),
-                             br(),
-                             h4("Samples:"),
-                             tableOutput("skittle_samples")
-                         )
-                       )
-              )
+  withMathJax(
+    div(
+      style = "
+        background-image: url('forest.png');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        padding: 20px;
+        padding: 20px;
+        font-weight: bold;
+        font-size: 18px;
+        color: black;
+      ",
+      
+      div(
+        style = "background-color: rgba(255,255,255,0.75); padding: 20px; border-radius: 10px;",
+        
+        h2("Tree Girth Sampling — Difference in Means (Oak − Maple)"),
+        
+        p("To earn full credit on the homework assignment, you must submit a hand-written assignment answering the following questions below AND a screenshot of you interacting with this application in some way."),
+        
+        p("Goal: Estimate the difference in population mean girth between Oak and Maple trees."),
+        
+        p("Assumption: You may assume that the girth of each tree type is normally distributed."),
+        
+        p("Each click generates a random observation. Construct a 90% confidence interval for μ_Oak − μ_Maple."),
+        
+        tags$ol(
+          tags$li("Take separate random samples for Oak and Maple."),
+          tags$li("Report your sample means, sample size, and sample standard deviation in proper notation."),
+          tags$li("Report your critical value."),
+          tags$li("Compute your 90% confidence interval for μ_Oak − μ_Maple."),
+          tags$li("Interpret your results in the context of the problem.")
+        ),
+        
+        br(),
+        h3("Click trees to generate observations"),
+        
+        fluidRow(
+          column(6,
+                 actionButton("oak",
+                              label = tags$img(src = "oak.png", height = "150px"),
+                              style = "border:none; background:none;")
+          ),
+          column(6,
+                 actionButton("maple",
+                              label = tags$img(src = "maple.png", height = "150px"),
+                              style = "border:none; background:none;")
+          )
+        ),
+        
+        br(),
+        
+        h4("Oak Sample"),
+        tableOutput("oak_table"),
+        
+        h4("Maple Sample"),
+        tableOutput("maple_table"),
+        
+        br(),
+        
+        h4("Sample Statistics"),
+        verbatimTextOutput("summary_stats"),
+        
+        br(),
+        
+        h4("Confidence Interval Formula (90%)"),
+        div(
+          style = "background-color: white; padding: 10px; border-radius: 8px;",
+          "$$
+          (\\bar{x}_{oak} - \\bar{x}_{maple})
+          \\pm t^* \\sqrt{
+            \\frac{s_{oak}^2}{n_{oak}} +
+            \\frac{s_{maple}^2}{n_{maple}}
+          }
+          $$
+          "
+        )
+      )
+    )
   )
 )
 
 server <- function(input, output, session) {
   
-  ## Tree Girth logic
   tree_params <- list(
     Oak = list(mean = 85, sd = 8),
-    Pine = list(mean = 60, sd = 5),
     Maple = list(mean = 72, sd = 6)
   )
   
-  sampled_data <- reactiveVal(data.frame(Tree = character(), Girth_cm = numeric(), stringsAsFactors = FALSE))
+  oak_data <- reactiveVal(
+    data.frame(Tree = character(), Girth_cm = numeric())
+  )
+  
+  maple_data <- reactiveVal(
+    data.frame(Tree = character(), Girth_cm = numeric())
+  )
   
   add_sample <- function(tree_name) {
     params <- tree_params[[tree_name]]
-    new_value <- round(rnorm(1, mean = params$mean, sd = params$sd), 1)
+    new_value <- round(rnorm(1, params$mean, params$sd), 1)
     new_row <- data.frame(Tree = tree_name, Girth_cm = new_value)
-    sampled_data(rbind(sampled_data(), new_row))
+    
+    if (tree_name == "Oak") {
+      oak_data(rbind(oak_data(), new_row))
+    } else {
+      maple_data(rbind(maple_data(), new_row))
+    }
   }
   
   observeEvent(input$oak, { add_sample("Oak") })
-  observeEvent(input$pine, { add_sample("Pine") })
   observeEvent(input$maple, { add_sample("Maple") })
   
-  output$girth_table <- renderTable({
-    sampled_data()
+  output$oak_table <- renderTable({
+    oak_data()
   })
   
-  ## Purple Skittles logic
-  true_proportion <- 0.3
-  skittle_samples <- reactiveVal(data.frame(Sample_Number = integer(), Purple = character(), stringsAsFactors = FALSE))
-  
-  observeEvent(input$sample_skittle, {
-    is_purple <- ifelse(runif(1) < true_proportion, "Yes", "No")
-    current <- skittle_samples()
-    new_sample <- data.frame(Sample_Number = nrow(current) + 1, Purple = is_purple)
-    skittle_samples(rbind(current, new_sample))
+  output$maple_table <- renderTable({
+    maple_data()
   })
   
-  output$skittle_samples <- renderTable({
-    skittle_samples()
+  output$summary_stats <- renderPrint({
+    x <- oak_data()$Girth_cm
+    y <- maple_data()$Girth_cm
+    
+    n1 <- length(x)
+    n2 <- length(y)
+    
+    cat("Oak sample size (n₁):", n1, "\n")
+    cat("Maple sample size (n₂):", n2, "\n\n")
+    
+    if (n1 > 0) {
+      cat("Oak mean (x̄₁):", round(mean(x), 3), "\n")
+    }
+    
+    if (n2 > 0) {
+      cat("Maple mean (x̄₂):", round(mean(y), 3), "\n")
+    }
+    
+    cat("\n")
+    
+    if (n1 > 1) {
+      cat("Oak SD (s₁):", round(sd(x), 3), "\n")
+    }
+    
+    if (n2 > 1) {
+      cat("Maple SD (s₂):", round(sd(y), 3), "\n")
+    }
+    
+    if (n1 > 1 & n2 > 1) {
+      df <- min(n1, n2) - 1
+      t_star <- qt(0.95, df = df)
+      
+      cat("\nCritical value (t*):", round(t_star, 4), "\n")
+    } else {
+      cat("\nNeed at least 2 observations per group for t*")
+    }
   })
 }
 
