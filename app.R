@@ -30,9 +30,9 @@ ui <- fluidPage(
         
         tags$ol(
           tags$li("Take separate random samples for Oak and Maple."),
-          tags$li("Report your sample means, sample size, and sample standard deviation in proper notation."),
-          tags$li("Report your critical value."),
-          tags$li("Compute your 90% confidence interval for μ_Oak − μ_Maple."),
+          tags$li("Report each of your your sample means, sample sizes, and sample standard deviations in proper notation."),
+          tags$li("Report your critical value in proper notation."),
+          tags$li("Compute your 90% confidence interval for μ_Oak − μ_Maple. You must show ALL of your work to receive full credit"),
           tags$li("Interpret your results in the context of the problem.")
         ),
         
